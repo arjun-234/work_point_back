@@ -13,7 +13,7 @@ urlpatterns = [
     path('jobview',views.jobviews.as_view()),
     path('delete_notify/<int:id>',views.Notifications.as_view(),name='delete_notify'),
     path('showstatus/<int:id>',views.Showstatus.as_view(),name='showstatus'),
-    path('showstatus',views.Showstatus.as_view(),name='showstatus'),
+     path('showstatus',views.Showstatus.as_view(),name='showstatus'),
     path('jobsearch',views.jobsearchview.as_view()),
     path('notification',views.Notifications.as_view()),
 

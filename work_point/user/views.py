@@ -13,7 +13,16 @@ from rest_framework import generics
 from client.models import  Proposal, User as ClientUser
 from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
+import re
 
+
+def invalid_username(username):
+	if re.match(r'^(?![._])[a-zA-Z0-9_.]{5,20}$',username):
+		return False
+	else:
+		return {'username':["1)Username must be 5-20 characters long",\
+				"2) Username may only contain:","- Uppercase and lowercase letters","- Numbers from 0-9 and",\
+				"- Special characters _.","3) Username may not:Begin or finish with _ ,."]}
 
 class userqualificationview(APIView):
     permission_classes = (IsAuthenticated,)
@@ -22,29 +31,64 @@ class userqualificationview(APIView):
         serializer = userqualserializer(userview)
         return Response(serializer.data)
 
-
 class userqal(APIView):
     permission_classes = (IsAuthenticated,)
     def  get(self,request):
-        id_ = ClientUser.objects.get(username=request.data['username']).id
-        userqal = UserQualification.objects.filter(user_id=id_)  
-        serializer = userqualserializer(userqal,many=True)
-        return Response(serializer.data)
+        try:
+            usernameobj=request.data['username']
+        except:
+            return Response({'msg':'Username Required'})
+        if invalid_username(request.data['username']):
+            return Response(invalid_username(request.data['username']))
+        else:
+            id_ = ClientUser.objects.get(username=request.data['username']).id
+            userqal = UserQualification.objects.filter(user_id=id_)  
+            serializer = userqualserializer(userqal,many=True)
+            return Response(serializer.data)
 
     def post(self,request):
-        request.data['user'] = ClientUser.objects.get(username=request.data['username']).id
-        serializer =  userqualserializer(data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response('data created')
-        return Response(serializer.errors) 
-   
+        try:
+            usernameobj=request.data['username']
+        except:
+            return Response({'msg':'Username Required'})
+        if invalid_username(request.data['username']):
+            return Response(invalid_username(request.data['username']))
+        else:
+            reg_error=[]
+            if ClientUser.objects.filter(username=request.data['username']).exists():
+                request.data['user'] = ClientUser.objects.get(username=request.data['username']).id
+                if request.data['recent_degree'].isalpha():
+                # if re.match(r"^[a-zA-Z]+$",request.data['recent_degree']):
+                    pass
+                else:
+                    reg_error.append({'recent_degree':[" only letter are allowed"]})
+                if re.match(r'^[a-zA-Z]+$',request.data['university']):
+                    pass
+                else:
+                    reg_error.append({'university':[" only letter are allowed"]})
+                if len(request.data['passing_year'])==4 and request.data['passing_year'].isdigit():
+                # if len(request.data['passing_year'])==4 and request.data['passing_year'].isdigit() and request.data['passing_year'] > '2022':
+                    pass
+                else:
+                    reg_error.append({'passing_year':" only numbers are allowed"})
+                serializer =  userqualserializer(data = request.data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response('data created')
+                return Response(serializer.errors) 
+            else:
+                return Response({'msg':'No account associated with given username'},status=404)
+    
 
 class userqualview(APIView):
     permission_classes = (IsAuthenticated,)
     def put(self,request,pk):
         # id_ = ClientUser.objects.get(username=request.data['username']).id
-        usrqual = UserQualification.objects.get(id=pk)
+        try:
+            usernameobj=request.data['username']
+        except:
+            return Response({'msg':'Username Required'})
+        usrqual = UserQualification.objects.get(user=pk)
         serializer = userqualserializer(usrqual, data=request.data,partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -57,6 +101,10 @@ class userqualview(APIView):
 class userexpview(APIView):
     permission_classes = (IsAuthenticated,)
     def get(self,request,id):
+        try:
+            usernameobj=request.data['username']
+        except:
+            return Response({'msg':'Username Required'})
         userview = UserExperience.objects.get(id=id)
         serializer = userexpserializer(userview)
         return Response(serializer.data)
@@ -65,23 +113,56 @@ class userexpview(APIView):
 class getuserexp(APIView):
     permission_classes = (IsAuthenticated,)
     def get(self,request):
-        id_ = ClientUser.objects.get(username=request.data['username']).id
-        usrexp = UserExperience.objects.filter(user_id=id_)  
-        serializer = userexpserializer(usrexp,many=True)
-        return Response(serializer.data) 
+        try:
+            usernameobj=request.data['username']
+        except:
+            return Response({'msg':'Username Required'})
+        if invalid_username(request.data['username']):
+            return Response(invalid_username(request.data['username']))
+        else:
+            id_ = ClientUser.objects.get(username=request.data['username']).id
+            usrexp = UserExperience.objects.filter(user_id=id_)  
+            serializer = userexpserializer(usrexp,many=True)
+            return Response(serializer.data) 
         
     def post(self,request):
-        request.data['user'] = ClientUser.objects.get(username=request.data['username']).id
-        serializer =  userexpserializer(data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response('data created')
-        return Response(serializer.errors) 
+        try:
+            usernameobj=request.data['username']
+        except:
+            return Response({'msg':'Username Required'})
+        if invalid_username(request.data['username']):
+            return Response(invalid_username(request.data['username']))
+        else:
+            reg_error=[]
+            request.data['user'] = ClientUser.objects.get(username=request.data['username']).id
+            if re.match(r'^[a-zA-Z]+',request.data['previous_job']):
+                pass
+            else:
+                reg_error.append({'previous_job':[" only letter are allowed"]})
+
+            if re.match(r'^[a-zA-Z]+',request.data['previous_compny']):
+                pass
+            else:
+                reg_error.append({'previous_compny':[" only letter are allowed"]})
+
+            if len(request.data['experience_year'])==4:
+                pass
+            else:
+                reg_error.append({'experience_year':" only numbers are allowed"})
+            serializer =  userexpserializer(data = request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response('data created')
+            return Response(serializer.errors) 
 
 
 class userexperienceview(APIView):
     permission_classes = (IsAuthenticated,)
     def put(self,request,pk):
+        try:
+            usernameobj=request.data['username']
+        except:
+            return Response({'msg':'Username Required'})
         usrqual = UserExperience.objects.get(id=pk)
         print(userqal,'ndksdnskdk')
         serializer = userexpserializer(usrqual, data=request.data,partial=True)
@@ -111,12 +192,19 @@ class jobsearchview(generics.ListCreateAPIView):
 class Notifications(APIView):
     permission_classes = (IsAuthenticated,)
     def get(self,request):
-        uid_ = ClientUser.objects.get(username=request.data['username']).id
-        # userview = Proposal.objects.filter(user_id=uid_)
-        userview = Proposal.objects.filter(Q(user_id=uid_)& Q(is_accepted = True)| Q(is_accepted = False))
-        print(userview,"fndfndnfknd")
-        serializer = NotificationUserSerializer(userview,many=True)
-        return Response(serializer.data)
+        try:
+            usernameobj=request.data['username']
+        except:
+            return Response({'msg':'Username Required'})
+        if invalid_username(request.data['username']):
+            return Response(invalid_username(request.data['username']))
+        else:
+            uid_ = ClientUser.objects.get(username=request.data['username']).id
+            # userview = Proposal.objects.filter(user_id=uid_)
+            userview = Proposal.objects.filter(Q(user_id=uid_)& Q(is_accepted = True)| Q(is_accepted = False))
+            print(userview,"fndfndnfknd")
+            serializer = NotificationUserSerializer(userview,many=True)
+            return Response(serializer.data)
 
     def delete(self,request,id):
         # uid_ = ClientUser.objects.get(username=request.data['username']).id
@@ -138,22 +226,25 @@ class Showstatus(APIView):
             return Response({'msg':'Job has not been updated'},status=400)    
 
     def get(self,request):
-        uid_ = ClientUser.objects.get(username=request.data['username']).id
-        proposal = Proposal.objects.filter(user_id=uid_)[::-1]
-        print(proposal,"****")
-        serializer = Statususer(proposal,many=True)
-        return Response(serializer.data)
+        try:
+            usernameobj=request.data['username']
+        except:
+            return Response({'msg':'Username Required'})
+        if invalid_username(request.data['username']):
+            return Response(invalid_username(request.data['username']))
+        else:    
+            uid_ = ClientUser.objects.get(username=request.data['username']).id
+            proposal = Proposal.objects.filter(user_id=uid_)[::-1]
+            print(proposal,"****")
+            serializer = Statususer(proposal,many=True)
+            return Response(serializer.data)
     
     def delete(self,request,id):
-        
         delete_notify = Proposal.objects.filter(id=id)
         delete_notify.delete()
         return Response({'msg':'Job has been Deleted'},status=200)
                
             
-      
-
-
       
 
         
