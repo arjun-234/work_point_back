@@ -10,7 +10,7 @@ class User(AbstractUser):
     mobile = models.CharField(max_length=12)
     gender = models.CharField(max_length=9)
     country = models.CharField(max_length=30,blank=True)
-    about = models.TextField(null=True)
+    about = models.TextField(blank=True)
     img_link = models.CharField(null=True,max_length=100)
     otp=models.IntegerField(null=True)
 
