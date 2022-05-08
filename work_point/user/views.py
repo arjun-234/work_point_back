@@ -105,7 +105,7 @@ class jobsearchview(generics.ListCreateAPIView):
     search_fields = ['title']
     filter_backends = (filters.SearchFilter,)
     queryset = Job.objects.all().filter(is_occupied=False)
-    serializer_class = jobserializer
+    serializer_class = jobviewserializer
 
 
 class Notifications(APIView):

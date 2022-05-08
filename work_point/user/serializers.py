@@ -1,5 +1,5 @@
 
-from client.models import Job, Proposal
+from client.models import Job, Proposal, User
 from .models import *
 from rest_framework import serializers
 
@@ -18,9 +18,14 @@ class  userexpserializer(serializers.ModelSerializer):
         fields = ['id','user','previous_job','previous_compny','experience_year','about']
 
 class jobviewserializer(serializers.ModelSerializer):
+    client_name = serializers.SerializerMethodField()
     class Meta:
         model =  Job
-        fields = ['id','title','description','posted_date','price','client','likes','unlikes','is_occupied','user','is_completed']
+        fields = ['id','title','description','posted_date','price','client','likes','unlikes','is_occupied','user','is_completed','client_name']
+
+    def get_client_name(self,obj):
+        user = User.objects.get(id=obj.client.id)
+        return user.first_name+' '+user.last_name
 
 
 class jobserializer(serializers.ModelSerializer):
