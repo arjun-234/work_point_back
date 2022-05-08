@@ -729,7 +729,7 @@ class ClearMessageCount(APIView):
 				obj.count = 0
 				obj.save()
 				# serializer.data['count']=0
-				return Response("count has been reset")
+				return Response({"msg":" has been reset"})
 				
 			else:
 				return Response({'msg':'No account associated with given username'},status=404)
