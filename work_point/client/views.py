@@ -462,7 +462,7 @@ class MakeProposal(APIView):
 					prop_obj = Proposal.objects.filter(Q(job_id=request.data['job']) & Q(user_id = request.data['user']))[0]
 					serializer = MakeProposalSerializer(data = request.data,many=False,instance=prop_obj)
 					jobobj=Job.objects.get(id=request.data['job'])
-					if int(jobobj.price) >= request.data['price'] and request.data['price'] != 0:
+					if int(jobobj.price) >= int(request.data['price']) and int(request.data['price']) != 0:
 						if serializer.is_valid():
 							serializer.save()
 							return Response({'msg':'Proposal has been made'})
@@ -474,7 +474,7 @@ class MakeProposal(APIView):
 
 					serializer = MakeProposalSerializer(data = request.data,many=False)
 					jobobj=Job.objects.get(id=request.data['job'])
-					if int(jobobj.price) >= request.data['price'] and request.data['price'] != 0:
+					if int(jobobj.price) >= int(request.data['price']) and int(request.data['price']) != 0:
 						if serializer.is_valid():
 							serializer.save()
 							return Response({'msg':'Proposal has been made'})
