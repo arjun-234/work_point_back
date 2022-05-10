@@ -57,5 +57,6 @@ urlpatterns = [
     path('chat_history',views.ChatHistory.as_view(),name='chat_history'),
     path('client_n',views.Clientnotfcation.as_view(),name='client_n'),   
     path('proposal_history',views.ProposalHistory.as_view(),name='proposal_history'),   
-    path('client_status',views.ClientStatus.as_view(),name='client_status'),   
+    path('client_status',views.ClientStatus.as_view(),name='client_status'),  
+    path('jobdetails',views.JobDetails.as_view(),name='jobdetails'),   
 ]

@@ -461,19 +461,27 @@ class MakeProposal(APIView):
 				if Proposal.objects.filter(Q(job_id=request.data['job']) & Q(user_id = request.data['user'])).exists():
 					prop_obj = Proposal.objects.filter(Q(job_id=request.data['job']) & Q(user_id = request.data['user']))[0]
 					serializer = MakeProposalSerializer(data = request.data,many=False,instance=prop_obj)
-					if serializer.is_valid():
-						serializer.save()
-						return Response({'msg':'Proposal has been made'})
+					jobobj=Job.objects.get(id=request.data['job'])
+					if int(jobobj.price) >= request.data['price'] and request.data['price'] != 0:
+						if serializer.is_valid():
+							serializer.save()
+							return Response({'msg':'Proposal has been made'})
+						else:
+							return Response(serializer.errors)
 					else:
-						return Response(serializer.errors)
+						return Response({'msg':f'Price must be in range of 1 to {int(jobobj.price)}'})
 				else:
 
 					serializer = MakeProposalSerializer(data = request.data,many=False)
-					if serializer.is_valid():
-						serializer.save()
-						return Response({'msg':'Proposal has been made'})
+					jobobj=Job.objects.get(id=request.data['job'])
+					if int(jobobj.price) >= request.data['price'] and request.data['price'] != 0:
+						if serializer.is_valid():
+							serializer.save()
+							return Response({'msg':'Proposal has been made'})
+						else:
+							return Response(serializer.errors)
 					else:
-						return Response(serializer.errors)
+						return Response({'msg':f'Price must be in range of 1 to {int(jobobj.price)}'})
 			else:
 				return Response({'msg':'No account associated with given username'},status=404)
 class ProposalAction(APIView):
@@ -865,5 +873,25 @@ class ClientStatus(APIView):
 
 				serializer=PropesalHistorySerializer(proposalobj,many=True)	
 				return Response(serializer.data)
+			else:
+				return Response({'msg':'No account associated with given username'},status=404)
+
+class JobDetails(APIView):
+	permission_classes = (IsAuthenticated,)
+	def post(self,request):
+		try:
+			usernameobj=request.data['username']
+		except:
+			return Response({'msg':'Username Required'})
+		if invalid_username(request.data['username']):
+			return Response(invalid_username(request.data['username']))
+		else:
+			if User.objects.filter(username=request.data['username']).exists():
+				if Job.objects.filter(id=request.data['job']).exists():
+					jobobj=Job.objects.get(id=request.data['job'])
+					serializer=JobSerializer(jobobj)
+					return Response(serializer.data)
+				else:
+					return Response({'msg':'Invalid Job ID'},status=404)
 			else:
 				return Response({'msg':'No account associated with given username'},status=404)
