@@ -163,3 +163,17 @@ class Showstatus(APIView):
     #         job.delete()
     #         return Response({'msg':'Job has been Deleted'},status=200)
        
+
+class userqualdelete(APIView):
+    def delete(self,request,pk):
+        # uid_ = ClientUser.objects.get(username=request.data['username']).id
+        delete_qualification =UserQualification.objects.get(id=pk)
+        delete_qualification.delete()
+        return Response({'msg':'Qualification has been Deleted'},status=200)  
+
+class userexpdelete(APIView):
+    def delete(self,request,pk):
+        # uid_ = ClientUser.objects.get(username=request.data['username']).id
+        delete_exp =UserExperience.objects.get(id=pk)
+        delete_exp.delete()
+        return Response({'msg':'Experience has been Deleted'},status=200)  

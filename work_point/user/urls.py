@@ -16,6 +16,11 @@ urlpatterns = [
     path('showstatus',views.Showstatus.as_view(),name='showstatus'),
     path('jobsearch',views.jobsearchview.as_view()),
     path('notification',views.Notifications.as_view()),
+    path('userqualdel/<int:pk>',views.userqualdelete.as_view()),
+    path('userexpdel/<int:pk>',views.userexpdelete.as_view()),
+
+
+
 
     # path('deletenotify/<int:id>',views.Notifications.as_view()),
     # path('usersearch',views.usersearchview.as_view()),
