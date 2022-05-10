@@ -66,7 +66,7 @@ class Register(APIView):
 				else:
 					return Response(serializer.errors)
 			else:
-				return Response({'msg':reg_error})
+				return Response({'msg':reg_error},status=406)
 
 class Login(APIView):
 	
