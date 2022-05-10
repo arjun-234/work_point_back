@@ -209,7 +209,7 @@ class UserProfileDetailsSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model=User
-		fields=['id','first_name','last_name','country','email','mobile','skill','userqual','userexp','img_link','about']
+		fields=['id','username','first_name','last_name','country','email','mobile','skill','userqual','userexp','img_link','about']
 
 	def get_skill(self,obj):
 		data = Skill.objects.filter(user=obj.id)
