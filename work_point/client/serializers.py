@@ -227,7 +227,7 @@ class UserProfileDetailsSerializer(serializers.ModelSerializer):
 class UserDetailsIdSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = User
-		fields = ['first_name','last_name','img_link']
+		fields = ['username','first_name','last_name','img_link']
 	
 class PropesalHistorySerializer(serializers.ModelSerializer):
 	job=JobSerializer()
