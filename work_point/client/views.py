@@ -34,6 +34,10 @@ def invalid_username(username):
 class Register(APIView):
 	def post(self,request):
 
+		if User.objects.filter(email=request.data['email']).exists():
+			return Response({'msg':'User with same email exists'},status=404)
+		if User.objects.filter(email=request.data['mobile']).exists():
+			return Response({'msg':'User with same mobile no. exists'},status=404)
 		if User.objects.filter(username=request.data['username']).exists():
 			return Response({'msg':'User with same username exists'},status=404)
 		else:
