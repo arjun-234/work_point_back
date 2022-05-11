@@ -16,6 +16,8 @@ import re
 # Create your views here.
 
 
+
+
 def invalid_username(username):
 	if re.match(r'^(?![._])[a-zA-Z0-9_.]{5,20}$',username):
 		return False
@@ -591,10 +593,11 @@ class UserJobList(APIView):
 						recommanded_jobs = recommander.give_job_recommandation(username=user.username,skill_list=skill_list)
 						job_list = Job.objects.filter(id__in=tuple(recommanded_jobs)).filter(is_occupied=False)
 						serializer = JobSerializer(job_list,many=True)
+						print(len(job_list))
 						return Response(serializer.data)
 					except:
 						print("***** NO records in db. first, insert record to run JobRecommander system *****")
-						job_list = Job.objects.all().filter(is_occupied=False)
+						job_list = Job.objects.all()
 						serializer = JobSerializer(job_list,many=True)
 						return Response(serializer.data)
 			else:
