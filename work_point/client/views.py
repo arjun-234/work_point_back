@@ -459,8 +459,6 @@ class MakeProposal(APIView):
 				request.data['user'] = User.objects.get(username=request.data['username']).id
 				if Proposal.objects.filter(Q(job_id=request.data['job']) & Q(user_id = request.data['user'])).exists():
 					prop_obj = Proposal.objects.filter(Q(job_id=request.data['job']) & Q(user_id = request.data['user']))[0]
-					prop_obj.is_accepted = False
-					prop_obj.save()
 					serializer = MakeProposalSerializer(data = request.data,many=False,instance=prop_obj)
 					jobobj=Job.objects.get(id=request.data['job'])
 					if int(jobobj.price) >= int(request.data['price']) and int(request.data['price']) != 0:
