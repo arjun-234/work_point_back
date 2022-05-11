@@ -52,7 +52,7 @@ class Register(APIView):
 				pass
 			else:
 				reg_error.append({'password':["at least one digit","at least one uppercase letter","at least one lowercase letter","at least one special character[$@#]"]})
-			if len(request.data['mobile'])==10 and request.data['mobile'].isdigit():
+			if re.match(r"(0|91)?[7-9][0-9]{9}",request.data['mobile']):
 				pass
 			else:
 				reg_error.append({'Mobile':"Invalid Mobile Number"})
@@ -214,13 +214,11 @@ class EditProfile(APIView):
 			if User.objects.filter(username=request.data['username']).exists():
 				user = User.objects.get(username=request.data['username'])
 				reg_error=[]
-				try:
-					if len(request.data['mobile'])==10 and request.data['mobile'].isdigit():
-						pass
-					else:
-						reg_error.append({'Mobile':"Invalid Mobile Number"})
-				except:
+				if re.match(r"(0|91)?[7-9][0-9]{9}",request.data['mobile']):
 					pass
+				else:
+					reg_error.append({'Mobile':"Invalid Mobile Number"})
+	
 				if len(reg_error)==0:
 					serializer = RegisterSerializer(data=request.data,many=False,instance=user,partial=True)
 					if serializer.is_valid():
