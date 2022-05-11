@@ -483,6 +483,7 @@ class MakeProposal(APIView):
 						return Response({'msg':f'Price must be in range of 1 to {int(jobobj.price)}'})
 			else:
 				return Response({'msg':'No account associated with given username'},status=404)
+
 class ProposalAction(APIView):
 	permission_classes = (IsAuthenticated,)
 	def put(self,request,id):
@@ -500,7 +501,6 @@ class ProposalAction(APIView):
 				proposarobj=User.objects.get(id=obj.user.id)
 				print(user,'user')
 				if Job.objects.filter(id=obj.job.id).exists():
-					
 					print(obj)
 					serializer = MakeProposalSerializer(data=request.data,instance=obj,partial=True)
 					if serializer.is_valid():
