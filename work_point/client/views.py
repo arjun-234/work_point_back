@@ -459,6 +459,8 @@ class MakeProposal(APIView):
 				request.data['user'] = User.objects.get(username=request.data['username']).id
 				if Proposal.objects.filter(Q(job_id=request.data['job']) & Q(user_id = request.data['user'])).exists():
 					prop_obj = Proposal.objects.filter(Q(job_id=request.data['job']) & Q(user_id = request.data['user']))[0]
+					prop_obj.is_accepted = None
+					prop_obj.save()
 					serializer = MakeProposalSerializer(data = request.data,many=False,instance=prop_obj)
 					jobobj=Job.objects.get(id=request.data['job'])
 					if int(jobobj.price) >= int(request.data['price']) and int(request.data['price']) != 0:
@@ -592,8 +594,10 @@ class UserJobList(APIView):
 						recommander = JR()
 						recommanded_jobs = recommander.give_job_recommandation(username=user.username,skill_list=skill_list)
 						job_list = Job.objects.filter(id__in=tuple(recommanded_jobs)).filter(is_occupied=False)
-						serializer = JobSerializer(job_list,many=True)
-						print(len(job_list))
+						qs_sorted = list()
+						for i in recommanded_jobs:
+							qs_sorted.append(job_list.get(id=i))
+						serializer = JobSerializer(qs_sorted,many=True)
 						return Response(serializer.data)
 					except:
 						print("***** NO records in db. first, insert record to run JobRecommander system *****")
