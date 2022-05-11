@@ -8,7 +8,7 @@ from client.models import User as ClientUser
 class UserQualification(models.Model):
     user = models.ForeignKey(ClientUser,on_delete=models.CASCADE)
     recent_degree = models.CharField(max_length=30)
-    cpi = models.PositiveIntegerField()
+    cpi = models.FloatField()
     passing_year = models.PositiveIntegerField()
     university = models.CharField(max_length=30)
     about  =  models.CharField(max_length=200)
