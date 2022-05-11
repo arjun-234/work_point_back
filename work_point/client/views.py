@@ -584,7 +584,7 @@ class UserJobList(APIView):
 				skill_obj = Skill.objects.filter(user=user)
 				skill_list=[i.name for i in skill_obj]
 				if len(skill_list)<1:
-					job_list = Job.objects.all().filter(is_occupied=False)
+					job_list = Job.objects.filter(is_occupied=False)
 					serializer = JobSerializer(job_list,many=True)
 					return Response(serializer.data[::-1])
 				else:
@@ -599,7 +599,7 @@ class UserJobList(APIView):
 						return Response(serializer.data)
 					except:
 						print("***** NO records in db. first, insert record to run JobRecommander system *****")
-						job_list = Job.objects.all().filter(is_occupied=False)
+						job_list = Job.objects.filter(is_occupied=False)
 						serializer = JobSerializer(job_list,many=True)
 						return Response(serializer.data[::-1])
 			else:
