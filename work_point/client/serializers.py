@@ -109,13 +109,22 @@ class NotificationUserSerializer(serializers.ModelSerializer):
 class ProposalDetailSerializer(serializers.ModelSerializer):
 	job = JobSerializer()
 	skill = serializers.SerializerMethodField()
+	user_skill=serializers.SerializerMethodField()
+	user_name=serializers.SerializerMethodField()
 	class Meta:
 		model = Proposal
-		fields = ['id','discription','price','skill','job']
+		fields = ['id','user','discription','price','skill','job','user_name','user_skill']
 	def get_skill(self,obj):
 		data = Skill.objects.filter(job=obj.job.id)
 		serializer = SkillSerializer(data,many=True)
 		return serializer.data
+	def get_user_skill(self,obj):
+		data=Skill.objects.filter(user=obj.user.id)
+		serializer=SkillSerializer(data,many=True)
+		return serializer.data
+	def get_user_name(self,obj):
+		data=User.objects.get(id=obj.user.id)
+		return data.username
 
 class MessageSerializer(serializers.ModelSerializer):
 	class Meta:
