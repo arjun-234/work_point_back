@@ -54,13 +54,8 @@ class Proposal(models.Model):
     job = models.ForeignKey(Job,on_delete=models.CASCADE)
     status = models.CharField(max_length=20,choices=STATUS_TYPES,null=True)
     is_accepted = models.BooleanField(null=True)
+    feedback = models.TextField(blank=True)
     
-    # def __str__(self):
-    #     return self.job.title 
-
-	# def __str__(self):
-	# 	return self.job.title
-
 
 class Notification(models.Model):
     proposal = models.ForeignKey(Proposal,on_delete=models.CASCADE)
