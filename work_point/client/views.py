@@ -921,13 +921,15 @@ class GiveRating(APIView):
 								if serializer.is_valid():
 									serializer.save()
 									return Response({'msg':f"You have Successfully given {request.data['number']} star"})
+								else:
+									return Response(serializer.errors)
 							else:
 								serializer = GiveRatingSerializer(data=request.data)
 								if serializer.is_valid():
 									serializer.save()
 									return Response({'msg':f"You have Successfully given {request.data['number']} star"})
-							else:
-								return Response(serializer.errors)
+								else:
+									return Response(serializer.errors)
 						else:
 							return Response({'msg':'Invalid Rating Number(1-5)'},status=404)
 					else:
