@@ -54,13 +54,8 @@ class Proposal(models.Model):
     job = models.ForeignKey(Job,on_delete=models.CASCADE)
     status = models.CharField(max_length=20,choices=STATUS_TYPES,null=True)
     is_accepted = models.BooleanField(null=True)
+    feedback = models.TextField(blank=True)
     
-    # def __str__(self):
-    #     return self.job.title 
-
-	# def __str__(self):
-	# 	return self.job.title
-
 
 class Notification(models.Model):
     proposal = models.ForeignKey(Proposal,on_delete=models.CASCADE)
@@ -82,3 +77,8 @@ class MessageCounter(models.Model):
     count=models.IntegerField()
     user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='message_counter_user')
     sender=models.ForeignKey(User,on_delete=models.CASCADE,related_name='message_counter_sender')
+
+class Rating(models.Model):
+    number = models.IntegerField()
+    job = models.ForeignKey(Job,on_delete=models.CASCADE,related_name="job_from_rating")
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="job_from_rating")

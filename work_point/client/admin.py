@@ -66,3 +66,7 @@ admin.site.register(Skill)
 
 admin.site.register(Proposal)
 admin.site.register(Message)
+
+@admin.register(Rating)
+class CustomRating(admin.ModelAdmin):
+    list_display =('number','job','user')
