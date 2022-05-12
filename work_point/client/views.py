@@ -593,7 +593,10 @@ class UserJobList(APIView):
 						job_list = Job.objects.filter(id__in=tuple(recommanded_jobs)).filter(is_occupied=False)
 						qs_sorted = list()
 						for i in recommanded_jobs:
-							qs_sorted.append(job_list.get(id=i))
+							try:
+								qs_sorted.append(job_list.get(id=i))
+							except:
+								pass
 						serializer = JobSerializer(qs_sorted,many=True)
 						return Response(serializer.data)
 					except:
