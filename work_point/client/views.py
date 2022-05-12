@@ -901,3 +901,31 @@ class JobDetails(APIView):
 					return Response({'msg':'Invalid Job ID'},status=404)
 			else:
 				return Response({'msg':'No account associated with given username'},status=404)
+
+class GiveRating(APIView):
+	def post(self,request):
+		try:
+			usernameobj=request.data['username']
+		except:
+			return Response({'msg':'Username Required'})
+		if invalid_username(request.data['username']):
+			return Response(invalid_username(request.data['username']),status=406)
+		else:
+			if User.objects.filter(username=request.data['username']).exists():
+				if Job.objects.filter(id=request.data['user']).exists():
+					if User.objects.filter(id=request.data['job']).exists():
+						if int(request.data['number']) in range(6):
+							serializer = GiveRatingSerializer(data=request.data)
+							if serializer.is_valid():
+								serializer.save()
+								return Response({'msg':f'You have Successfully given {request.data['number']} star'})
+							else:
+								return Response(serializer.errors)
+						else:
+							return Response({'msg':'Invalid user ID'},status=404)
+					else:
+						return Response({'msg':'Invalid user ID'},status=404)
+				else:
+					return Response({'msg':'Invalid Job ID'},status=404)
+			else:
+				return Response({'msg':'No account associated with given username'},status=404)

@@ -244,3 +244,8 @@ class PropesalHistorySerializer(serializers.ModelSerializer):
 	class Meta:
 		model=Proposal
 		fields=['user','job','status','is_accepted','discription','price','feedback']
+
+class GiveRatingSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Rating
+		fields = '__all__'
