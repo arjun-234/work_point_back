@@ -54,7 +54,7 @@ class Proposal(models.Model):
     job = models.ForeignKey(Job,on_delete=models.CASCADE)
     status = models.CharField(max_length=20,choices=STATUS_TYPES,null=True)
     is_accepted = models.BooleanField(null=True)
-    # feedback = models.TextField(blank=True)
+    feedback = models.TextField(blank=True)
     
 
 class Notification(models.Model):
