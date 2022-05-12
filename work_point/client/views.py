@@ -213,11 +213,14 @@ class EditProfile(APIView):
 			if User.objects.filter(username=request.data['username']).exists():
 				user = User.objects.get(username=request.data['username'])
 				reg_error=[]
-				if re.match(r"(0|91)?[7-9][0-9]{9}",request.data['mobile']):
+				try:
+
+					if re.match(r"(0|91)?[7-9][0-9]{9}",request.data['mobile']):
+						pass
+					else:
+						reg_error.append({'Mobile':"Invalid Mobile Number"})
+				except:
 					pass
-				else:
-					reg_error.append({'Mobile':"Invalid Mobile Number"})
-	
 				if len(reg_error)==0:
 					serializer = RegisterSerializer(data=request.data,many=False,instance=user,partial=True)
 					if serializer.is_valid():
