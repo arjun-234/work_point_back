@@ -1,3 +1,5 @@
+from email import message
+from pyexpat.errors import messages
 from traceback import print_tb
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -36,22 +38,23 @@ class userqal(APIView):
         serializer =  userqualserializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response('data created')
+            return Response('Qualification data created')
         return Response(serializer.errors) 
    
 
+       
 class userqualview(APIView):
     permission_classes = (IsAuthenticated,)
     def put(self,request,pk):
-        # id_ = ClientUser.objects.get(username=request.data['username']).id
         usrqual = UserQualification.objects.get(id=pk)
         serializer = userqualserializer(usrqual, data=request.data,partial=True)
         if serializer.is_valid():
             serializer.save()
-            return Response({'msg':'data update'},status=status.HTTP_200_OK)
+            return Response({'msg':'Qualification has been Updated'},status=status.HTTP_200_OK)
         else:
-            print(serializer.errors)
-            return Response({'msg':'data not update'},status=status.HTTP_400_BAD_REQUEST)
+            return Response({'msg':'Qualification data not update'},status=status.HTTP_406_NOT_ACCEPTABLE)
+            
+           
             
                
 class userexpview(APIView):
@@ -61,7 +64,7 @@ class userexpview(APIView):
         serializer = userexpserializer(userview)
         return Response(serializer.data)
 
-                   
+
 class getuserexp(APIView):
     permission_classes = (IsAuthenticated,)
     def get(self,request):
@@ -75,31 +78,28 @@ class getuserexp(APIView):
         serializer =  userexpserializer(data = request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response('data created')
-        return Response(serializer.errors) 
-
-
+            return Response("Experience has been created",status=status.HTTP_200_OK)
+        return Response({"msg":"Experience Not created"},status=status.HTTP_406_NOT_ACCEPTABLE) 
+            
+      
 class userexperienceview(APIView):
     permission_classes = (IsAuthenticated,)
     def put(self,request,pk):
         usrqual = UserExperience.objects.get(id=pk)
-        print(userqal,'ndksdnskdk')
         serializer = userexpserializer(usrqual, data=request.data,partial=True)
-        print(serializer,'dsdsndksdnskndksnd')
         if serializer.is_valid():
             serializer.save()
-            return Response({'msg':'data update'},status=status.HTTP_200_OK)
+            return Response({'msg':'Experience data update'},status=status.HTTP_200_OK)
         else:
-             print(serializer.errors)
-             return Response({'msg':'data not update'},status=status.HTTP_400_BAD_REQUEST)
-                 
+            return Response({'msg':'Experience data not update'},status=status.HTTP_406_NOT_ACCEPTABLE)
+      
+       
 class jobviews(APIView):
     permission_classes = (IsAuthenticated,)
     def get(self,request):
         jobviews = Job.objects.all().filter(is_occupied=False)
         serializer = jobviewserializer(jobviews,many=True)
         return Response(serializer.data)
-
 
 class jobsearchview(generics.ListCreateAPIView):
     search_fields = ['title']
@@ -114,15 +114,18 @@ class Notifications(APIView):
         uid_ = ClientUser.objects.get(username=request.data['username']).id
         # userview = Proposal.objects.filter(user_id=uid_)
         userview = Proposal.objects.filter(Q(user_id=uid_)& Q(is_accepted = True)| Q(is_accepted = False))
-        print(userview,"fndfndnfknd")
         serializer = NotificationUserSerializer(userview,many=True)
         return Response(serializer.data)
+       
 
     def delete(self,request,id):
-        # uid_ = ClientUser.objects.get(username=request.data['username']).id
-        delete_notify =Proposal.objects.get(id=id)
-        delete_notify.delete()
-        return Response({'msg':'Job has been Deleted'},status=200)
+        if id:
+            delete_notify =Proposal.objects.get(id=id)
+            delete_notify.delete()
+            return Response({'msg':'Notifications has been Deleted'},status=200)
+        else:
+            return Response({'msg':'Notifications id not get'},status=200)
+        
 
 class Showstatus(APIView):
     permission_classes = (IsAuthenticated,)
@@ -132,10 +135,10 @@ class Showstatus(APIView):
         serializer = Statususer(proposal, data=request.data,partial=True,many=False)
         if serializer.is_valid():
             serializer.save()
-            return Response({'msg':'Job has been updated'},status=200)
+            return Response({'msg':'Status has been updated'},status=200)
         else:
             print(serializer.errors)
-            return Response({'msg':'Job has not been updated'},status=400)    
+            return Response({'msg':'Status has not been updated'},status=400)    
 
     def get(self,request):
         uid_ = ClientUser.objects.get(username=request.data['username']).id
@@ -145,35 +148,29 @@ class Showstatus(APIView):
         return Response(serializer.data)
     
     def delete(self,request,id):
-        
-        delete_notify = Proposal.objects.filter(id=id)
-        delete_notify.delete()
-        return Response({'msg':'Job has been Deleted'},status=200)
-               
+        if id:
+            delete_notify = Proposal.objects.filter(id=id)
+            delete_notify.delete()
+            return Response({'msg':'Job has been Deleted'},status=200)
+        else:
+            return Response({'msg':'Status id not get'},status.HTTP_406_NOT_ACCEPTABLE)
+
             
       
-
-        
-                    
-
-
-    # def delete(self,request,id):
-    #     # if ClientUser.objects.filter(username=request.data['username']).exists():
-    #         job = Proposal.objects.get(id=id) 
-    #         job.delete()
-    #         return Response({'msg':'Job has been Deleted'},status=200)
-       
-
 class userqualdelete(APIView):
     def delete(self,request,pk):
-        # uid_ = ClientUser.objects.get(username=request.data['username']).id
-        delete_qualification =UserQualification.objects.get(id=pk)
-        delete_qualification.delete()
-        return Response({'msg':'Qualification has been Deleted'},status=200)  
+        if pk:
+            delete_qualification =UserQualification.objects.get(id=pk)
+            delete_qualification.delete()
+            return Response({'msg':'Qualification has been Deleted'},status=200)  
+        else:
+            return Response({'msg':'Qualification  id not get'},status.HTTP_406_NOT_ACCEPTABLE)  
 
 class userexpdelete(APIView):
     def delete(self,request,pk):
-        # uid_ = ClientUser.objects.get(username=request.data['username']).id
-        delete_exp =UserExperience.objects.get(id=pk)
-        delete_exp.delete()
-        return Response({'msg':'Experience has been Deleted'},status=200)  
+        if pk:
+            delete_exp =UserExperience.objects.get(id=pk)
+            delete_exp.delete()
+            return Response({'msg':'Experience has been Deleted'},status.HTTP_200_OK)  
+        else:
+            return Response({'msg':'Experience id not get'},status.HTTP_406_NOT_ACCEPTABLE)  
