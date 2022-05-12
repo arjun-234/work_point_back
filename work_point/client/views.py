@@ -912,8 +912,8 @@ class GiveRating(APIView):
 			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
-				if Job.objects.filter(id=request.data['user']).exists():
-					if User.objects.filter(id=request.data['job']).exists():
+				if Job.objects.filter(id=int(request.data['job'])).exists():
+					if User.objects.filter(id=int(request.data['user'])).exists():
 						if int(request.data['number']) in range(6):
 							serializer = GiveRatingSerializer(data=request.data)
 							if serializer.is_valid():
@@ -922,7 +922,7 @@ class GiveRating(APIView):
 							else:
 								return Response(serializer.errors)
 						else:
-							return Response({'msg':'Invalid user ID'},status=404)
+							return Response({'msg':'Invalid Rating Number(1-5)'},status=404)
 					else:
 						return Response({'msg':'Invalid user ID'},status=404)
 				else:
