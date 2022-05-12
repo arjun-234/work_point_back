@@ -59,5 +59,5 @@ urlpatterns = [
     path('proposal_history',views.ProposalHistory.as_view(),name='proposal_history'),   
     path('client_status',views.ClientStatus.as_view(),name='client_status'),  
     path('jobdetails',views.JobDetails.as_view(),name='jobdetails'),
-    path('give_rating',views.GiveRating.as_view(),name='give_rating'),   
+    path('give_rating',views.GiveRating.as_view(),name='give_rating')   
 ]

@@ -918,7 +918,7 @@ class GiveRating(APIView):
 							serializer = GiveRatingSerializer(data=request.data)
 							if serializer.is_valid():
 								serializer.save()
-								return Response({'msg':f'You have Successfully given {request.data['number']} star'})
+								return Response({'msg':f"You have Successfully given {request.data['number']} star"})
 							else:
 								return Response(serializer.errors)
 						else:
