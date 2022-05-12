@@ -174,3 +174,13 @@ class userexpdelete(APIView):
             return Response({'msg':'Experience has been Deleted'},status.HTTP_200_OK)  
         else:
             return Response({'msg':'Experience id not get'},status.HTTP_406_NOT_ACCEPTABLE)  
+
+
+class PandingNotifications(APIView):
+    # permission_classes = (IsAuthenticated,)
+    def get(self,request):
+        uid_ = ClientUser.objects.get(username=request.data['username']).id
+        # userview = Proposal.objects.filter(user_id=uid_)
+        userview = Proposal.objects.filter(Q(user_id=uid_)& Q(is_accepted = None)| Q(is_accepted = None))
+        serializer = NotificationUserSerializer(userview,many=True)
+        return Response(serializer.data)
