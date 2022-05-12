@@ -58,5 +58,6 @@ urlpatterns = [
     path('client_n',views.Clientnotfcation.as_view(),name='client_n'),   
     path('proposal_history',views.ProposalHistory.as_view(),name='proposal_history'),   
     path('client_status',views.ClientStatus.as_view(),name='client_status'),  
-    path('jobdetails',views.JobDetails.as_view(),name='jobdetails'),   
+    path('jobdetails',views.JobDetails.as_view(),name='jobdetails'),
+    path('give_rating',views.GiveRating.as_view(),name='give_rating'),   
 ]
