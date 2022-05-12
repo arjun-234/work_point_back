@@ -915,10 +915,17 @@ class GiveRating(APIView):
 				if Job.objects.filter(id=int(request.data['job'])).exists():
 					if User.objects.filter(id=int(request.data['user'])).exists():
 						if int(request.data['number']) in range(6):
-							serializer = GiveRatingSerializer(data=request.data)
-							if serializer.is_valid():
-								serializer.save()
-								return Response({'msg':f"You have Successfully given {request.data['number']} star"})
+							if Rating.objects.filter(job_id=int(request.data['job'])).filter(user_id=int(request.data['user'])).exists():
+								raitng_obj = Rating.objects.filter(job_id=int(request.data['job'])).filter(user_id=int(request.data['user']))[0]
+								serializer = GiveRatingSerializer(data=request.data,instance=raitng_obj)
+								if serializer.is_valid():
+									serializer.save()
+									return Response({'msg':f"You have Successfully given {request.data['number']} star"})
+							else:
+								serializer = GiveRatingSerializer(data=request.data)
+								if serializer.is_valid():
+									serializer.save()
+									return Response({'msg':f"You have Successfully given {request.data['number']} star"})
 							else:
 								return Response(serializer.errors)
 						else:
