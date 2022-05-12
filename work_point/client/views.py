@@ -22,9 +22,9 @@ def invalid_username(username):
 	if re.match(r'^(?![._])[a-zA-Z0-9_.]{5,20}$',username):
 		return False
 	else:
-		return {'username':["1)Username must be 5-20 characters long",\
+		return {"msg":{'username':["1)Username must be 5-20 characters long",\
 				"2) Username may only contain:","- Uppercase and lowercase letters","- Numbers from 0-9 and",\
-				"- Special characters _.","3) Username may not:Begin or finish with _ ,."]}
+				"- Special characters _.","3) Username may not:Begin or finish with _ ,."]}}
 
 class Register(APIView):
 	def post(self,request):
