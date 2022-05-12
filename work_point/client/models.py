@@ -77,3 +77,8 @@ class MessageCounter(models.Model):
     count=models.IntegerField()
     user=models.ForeignKey(User,on_delete=models.CASCADE,related_name='message_counter_user')
     sender=models.ForeignKey(User,on_delete=models.CASCADE,related_name='message_counter_sender')
+
+class Rating(models.Model):
+    number = models.IntegerField()
+    job = models.ForeignKey(Job,on_delete=models.CASCADE,related_name="job_from_rating")
+    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name="job_from_rating")
