@@ -240,7 +240,7 @@ class UserDetailsIdSerializer(serializers.ModelSerializer):
 	
 class PropesalHistorySerializer(serializers.ModelSerializer):
 	job=JobSerializer()
-	user=UserSerializer()
+	user=UserProfileDetailsSerializer()
 	class Meta:
 		model=Proposal
 		fields=['user','job','status','is_accepted','discription','price','feedback']
