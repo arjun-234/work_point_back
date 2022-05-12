@@ -68,14 +68,13 @@ class Register(APIView):
 				return Response({'msg':reg_error},status=406)
 
 class Login(APIView):
-	
 	def post(self,request):
 		try:
 			usernameobj=request.data['username']
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				obj = authenticate(username=request.data['username'],password=request.data['password'])
@@ -96,7 +95,7 @@ class Logout(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				user = User.objects.get(username=request.data['username'])
@@ -114,7 +113,7 @@ class VerifyToken(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				user = User.objects.get(username=request.data['username'])
@@ -134,7 +133,7 @@ class ForgotPassword(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				user =  User.objects.get(username=request.data['username'])
@@ -158,7 +157,7 @@ class VerifyOTP(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				user =  User.objects.get(username=request.data['username'])
@@ -182,7 +181,7 @@ class SetPassword(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				reg_error=[]
@@ -209,7 +208,7 @@ class EditProfile(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				user = User.objects.get(username=request.data['username'])
@@ -239,7 +238,7 @@ class UserDetails(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				user = User.objects.get(username=request.data['username'])
@@ -256,7 +255,7 @@ class JobPost(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				request.data['client'] = User.objects.get(username=request.data['username']).id
@@ -277,7 +276,7 @@ class EditJob(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				job = Job.objects.get(id=id) 
@@ -298,7 +297,7 @@ class GetJobDetail(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				job = Job.objects.get(id=id) 
@@ -315,7 +314,7 @@ class DeleteJob(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				job = Job.objects.get(id=id) 
@@ -332,7 +331,7 @@ class LikeJob(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				user = User.objects.get(username=request.data['username'])
@@ -359,7 +358,7 @@ class DislikeJob(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				user = User.objects.get(username=request.data['username'])
@@ -386,7 +385,7 @@ class AsignJobToUser(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				user = User.objects.get(username=request.data['username'])
@@ -411,7 +410,7 @@ class UpdateStatus(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if Job.objects.filter(id=id).exists():
 				job = Job.objects.get(id=id)
@@ -432,7 +431,7 @@ class ClientJobList(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				user = User.objects.get(username=request.data['username'])
@@ -450,7 +449,7 @@ class MakeProposal(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				request.data['client'] = Job.objects.get(id=request.data['job']).client.id
@@ -492,7 +491,7 @@ class ProposalAction(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				user = User.objects.get(username=request.data['username'])
@@ -534,7 +533,7 @@ class AddUserSKill(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				user = User.objects.get(username=request.data['username'])
@@ -577,7 +576,7 @@ class UserJobList(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				user = User.objects.get(username=request.data['username'])
@@ -613,7 +612,7 @@ class ProposalDetail(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				obj = Proposal.objects.filter(job_id=id).get(user_id=request.data['proposer_id'])
@@ -632,7 +631,7 @@ class MessagePost(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				request.data['sender']=User.objects.get(username=request.data['username']).id
@@ -677,7 +676,7 @@ class ChatList(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				smobj=User.objects.get(username=request.data['username'])
@@ -697,7 +696,7 @@ class UserDetailsId(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				obj=User.objects.get(id=id)
@@ -715,7 +714,7 @@ class MessageCount(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				userobj=User.objects.get(username=request.data['username'])
@@ -733,7 +732,7 @@ class ClearMessageCount(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				userobj=User.objects.get(username=request.data['username'])
@@ -756,7 +755,7 @@ class ChatDetails(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				return Response({""})
@@ -774,7 +773,7 @@ class UserProfileSearch(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				qry=User.objects.filter(Q(username__icontains = request.data['input'])|Q(first_name__icontains = request.data['input'])|Q(last_name__icontains = request.data['input']))
@@ -793,7 +792,7 @@ class ChatHistory(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				qry=User.objects.filter(Q(username=request.data['username'])|Q(id=request.data['id'])|Q()|Q())
@@ -811,7 +810,7 @@ class Clientnotfcation(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				cid_ = User.objects.get(username=request.data['username']).id
@@ -832,7 +831,7 @@ class UserProfileDetails(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				qry=User.objects.filter(id=id)
@@ -851,7 +850,7 @@ class ProposalHistory(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				userobj=User.objects.get(username=request.data['username'])
@@ -869,7 +868,7 @@ class ClientStatus(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				userobj=User.objects.get(username=request.data['username'])
@@ -888,7 +887,7 @@ class JobDetails(APIView):
 		except:
 			return Response({'msg':'Username Required'})
 		if invalid_username(request.data['username']):
-			return Response(invalid_username(request.data['username']))
+			return Response(invalid_username(request.data['username']),status=406)
 		else:
 			if User.objects.filter(username=request.data['username']).exists():
 				if Job.objects.filter(id=request.data['job']).exists():
