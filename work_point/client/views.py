@@ -906,6 +906,7 @@ class JobDetails(APIView):
 				return Response({'msg':'No account associated with given username'},status=404)
 
 class GiveRating(APIView):
+	permission_classes = (IsAuthenticated,)
 	def post(self,request):
 		try:
 			usernameobj=request.data['username']
