@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.test import client
 from django.db.models import Q
-from client.serializers import NotificationUserSerializer
+from client.serializers import NotificationUserSerializer,PropesalHistorySerializer
 from .models import *
 from .serializers import *
 from rest_framework.views import APIView
@@ -114,7 +114,7 @@ class Notifications(APIView):
         uid_ = ClientUser.objects.get(username=request.data['username']).id
         # userview = Proposal.objects.filter(user_id=uid_)
         userview = Proposal.objects.filter(Q(user_id=uid_)&(Q(is_accepted = True)| Q(is_accepted = False)))
-        serializer = NotificationUserSerializer(userview,many=True)
+        serializer = PropesalHistorySerializer(userview,many=True)
         return Response(serializer.data)
        
 
@@ -144,7 +144,7 @@ class Showstatus(APIView):
         uid_ = ClientUser.objects.get(username=request.data['username']).id
         proposal = Proposal.objects.filter(user_id=uid_)[::-1]
         print(proposal,"****")
-        serializer = Statususer(proposal,many=True)
+        serializer = PropesalHistorySerializer(proposal,many=True)
         return Response(serializer.data)
     
     def delete(self,request,id):
@@ -182,5 +182,5 @@ class PandingNotifications(APIView):
         uid_ = ClientUser.objects.get(username=request.data['username']).id
         # userview = Proposal.objects.filter(user_id=uid_)
         userview = Proposal.objects.filter(Q(user_id=uid_)& Q(is_accepted = None)| Q(is_accepted = None))
-        serializer = NotificationUserSerializer(userview,many=True)
+        serializer = PropesalHistorySerializer(userview,many=True)
         return Response(serializer.data)

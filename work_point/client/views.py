@@ -229,7 +229,7 @@ class EditProfile(APIView):
 					else:
 						return Response(serializer.errors)
 				else:
-					return Response({'msg':reg_error})
+					return Response({'msg':reg_error},status=406)
 			else:
 				return Response({'msg':'No account associated with given username'},status=404)
 
@@ -463,14 +463,17 @@ class MakeProposal(APIView):
 					prop_obj.save()
 					serializer = MakeProposalSerializer(data = request.data,many=False,instance=prop_obj)
 					jobobj=Job.objects.get(id=request.data['job'])
-					if int(jobobj.price) >= int(request.data['price']) and int(request.data['price']) != 0:
-						if serializer.is_valid():
-							serializer.save()
-							return Response({'msg':'Proposal has been made'})
+					if len(request.data['discription'].strip())>0:
+						if int(jobobj.price) >= int(request.data['price']) and int(request.data['price']) != 0:
+							if serializer.is_valid():
+								serializer.save()
+								return Response({'msg':'Proposal has been made'})
+							else:
+								return Response(serializer.errors)
 						else:
-							return Response(serializer.errors)
+							return Response({'msg':f'Price must be in range of 1 to {int(jobobj.price)}'},status=406)
 					else:
-						return Response({'msg':f'Price must be in range of 1 to {int(jobobj.price)}'})
+						return Response({'msg':'discription must not be empty'},status=406)
 				else:
 
 					serializer = MakeProposalSerializer(data = request.data,many=False)
