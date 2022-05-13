@@ -54,9 +54,11 @@ class UserSerializer(serializers.ModelSerializer):
 class JobSerializer(serializers.ModelSerializer):
 	skill=serializers.SerializerMethodField()
 	client_name=serializers.SerializerMethodField()
+	rating = serializers.SerializerMethodField()
+
 	class Meta:
 		model = Job
-		fields = ['id','title','description','posted_date','is_completed','price','is_occupied','client','likes','unlikes','user','skill','client_name']
+		fields = ['id','title','description','posted_date','is_completed','price','is_occupied','client','likes','unlikes','user','skill','client_name','rating']
 
 	def get_skill(self,obj):
 		data = Skill.objects.filter(job=obj.id)
@@ -66,8 +68,13 @@ class JobSerializer(serializers.ModelSerializer):
 	def get_client_name(self,obj):
 		data=User.objects.get(id=obj.client.id)
 		return data.first_name+' '+data.last_name
-
-
+	
+	def get_rating(self,obj):
+		try:
+			ratobj = Rating.objects.get(job_id=obj.id)
+			return ratobj.number
+		except:
+			return None
 
 class UserOnClientSidePostSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -227,7 +234,7 @@ class JobUserProfileSerializer(serializers.ModelSerializer):
 			ratobj = Rating.objects.get(job_id=obj.id)
 			return ratobj.number
 		except:
-			return'No rating given'
+			return None
 
 class UserProfileDetailsSerializer(serializers.ModelSerializer):
 	skill = serializers.SerializerMethodField()
