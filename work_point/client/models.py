@@ -18,7 +18,6 @@ class Job(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField()
     posted_date = models.CharField(max_length=20)
-    is_completed = models.BooleanField(null=True)
     price = models.FloatField()
     client = models.ForeignKey(User,on_delete=models.CASCADE)
     likes = models.ManyToManyField(User,related_name='blog_likes',blank=True)

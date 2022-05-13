@@ -210,15 +210,35 @@ class ClientnotificationSerializer(serializers.ModelSerializer):
 		job_id = JobSerializerwithid(obj,many=False)
 		return job_id.data
 
+class JobUserProfileSerializer(serializers.ModelSerializer):
+	skill=serializers.SerializerMethodField()
+	rating=serializers.SerializerMethodField()
+	class Meta:
+		model = Job
+		fields = ['id','title','description','posted_date','is_completed','price','is_occupied','client','likes','unlikes','user','skill','rating']
+
+	def get_skill(self,obj):
+		data = Skill.objects.filter(job=obj.id)
+		serializer = SkillSerializer(data,many=True)
+		return serializer.data
+
+	def get_rating(self,obj):
+		try:
+			ratobj = Rating.objects.get(job_id=obj.id)
+			return ratobj.number
+		except:
+			return'No rating given'
+
 class UserProfileDetailsSerializer(serializers.ModelSerializer):
 	skill = serializers.SerializerMethodField()
 	userqual=serializers.SerializerMethodField()
 	userexp=serializers.SerializerMethodField()
+	completed_project =serializers.SerializerMethodField()
 
 
 	class Meta:
 		model=User
-		fields=['id','username','first_name','last_name','country','email','mobile','skill','userqual','userexp','img_link','about']
+		fields=['id','username','first_name','last_name','country','email','mobile','skill','userqual','userexp','img_link','about','completed_project']
 
 	def get_skill(self,obj):
 		data = Skill.objects.filter(user=obj.id)
@@ -232,6 +252,15 @@ class UserProfileDetailsSerializer(serializers.ModelSerializer):
 		data=UserExperience.objects.filter(user=obj.id)
 		serializer =userexpserializer(data,many=True)
 		return serializer.data
+	def get_completed_project(self,obj):
+		propobj = Proposal.objects.filter(user_id=obj.id).filter(status='completed')
+		templist=[]
+		for i in propobj:
+			templist.append(i.job.id)
+		job_list = Job.objects.filter(id__in=tuple(templist))
+		serializer = JobUserProfileSerializer(job_list,many=True)
+		return serializer.data
+
 
 class UserDetailsIdSerializer(serializers.ModelSerializer):
 	class Meta:

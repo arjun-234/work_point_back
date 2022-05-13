@@ -113,7 +113,7 @@ class Notifications(APIView):
     def get(self,request):
         uid_ = ClientUser.objects.get(username=request.data['username']).id
         # userview = Proposal.objects.filter(user_id=uid_)
-        userview = Proposal.objects.filter(Q(user_id=uid_)& Q(is_accepted = True)| Q(is_accepted = False))
+        userview = Proposal.objects.filter(Q(user_id=uid_)&(Q(is_accepted = True)| Q(is_accepted = False)))
         serializer = NotificationUserSerializer(userview,many=True)
         return Response(serializer.data)
        
