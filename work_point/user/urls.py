@@ -18,7 +18,7 @@ urlpatterns = [
     path('notification',views.Notifications.as_view()),
     path('userqualdel/<int:pk>',views.userqualdelete.as_view()),
     path('userexpdel/<int:pk>',views.userexpdelete.as_view()),
-    path('pandignotify',views.PandingNotifications.as_view()),
+    path('pendingnotify',views.PendingNotifications.as_view()),
 
 
 

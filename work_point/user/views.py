@@ -176,7 +176,7 @@ class userexpdelete(APIView):
             return Response({'msg':'Experience id not get'},status.HTTP_406_NOT_ACCEPTABLE)  
 
 
-class PandingNotifications(APIView):
+class PendingNotifications(APIView):
     # permission_classes = (IsAuthenticated,)
     def get(self,request):
         uid_ = ClientUser.objects.get(username=request.data['username']).id
